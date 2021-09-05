@@ -1,4 +1,4 @@
-local startBlock = workspace:WaitForChild("StartPart")
+local startBlock = workspace:WaitForChild("LightFolder"):WaitForChild("StartPart")
 
 local templatePart = Instance.new("Part")
 templatePart.Anchored = true
@@ -16,12 +16,13 @@ local radius = 70 -- increare to make circle of light bigger
 local slices = 3000-- increase to make light more precise (reccommended formula: radius*12)
 local increment = tau/slices
 
-local normalVector = Vector3.new(radius, 0, 0)
+local normalVector = startPosition+Vector3.new(radius, 0, 0)
 local blackList = table.create(slices+1)
 
 templatePart.Size = Vector3.new(increment, increment, increment)*radius
 
 local function connectPoints(part, endPosition)
+
 	part.Size = Vector3.new(
 		part.Size.X, part.Size.Y, 
 		(startPosition - endPosition).Magnitude
@@ -35,7 +36,7 @@ local function connectPoints(part, endPosition)
 end
 
 local function newPart(endPosition)
-	return connectPoints(templatePart:Clone(), startPosition+Vector3.new(endPosition.X, 0, endPosition.Z))
+	return connectPoints(templatePart:Clone(), startPosition+endPosition)
 end
 
 for angle = 0, tau, increment do
@@ -43,14 +44,14 @@ for angle = 0, tau, increment do
 	local sin = math.sin(angle)
 	
 	local angledVector = Vector3.new(
-		cos*normalVector.X - sin*normalVector.Y,
+		cos*normalVector.X - sin*normalVector.Z,
 		0,
-		sin*normalVector.X + cos*normalVector.Y
+		sin*normalVector.X + cos*normalVector.Z
 	)
 
 	local rayResult = workspace:Raycast(startPosition, startPosition+angledVector, raycastParams)
 	
-	local p = newPart(rayResult and rayResult.Position or angledVector)
+	local p = newPart(rayResult and Vector3.new(rayResult.Position.X, 0, rayResult.Position.Z) or angledVector)
 	p.Parent = workspace
 	
 	table.insert(blackList, p)
