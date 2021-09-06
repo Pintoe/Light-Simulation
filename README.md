@@ -8,3 +8,5 @@ Examples of what is outputted in the 3d space when run:
 ![alt text](https://github.com/Pintoe/Light-Simulation/blob/main/images/fullview.png?raw=true)
 
 ![alt text](https://github.com/Pintoe/Light-Simulation/blob/main/images/angledview.png?raw=true)
+
+# 3d Light Simulation
